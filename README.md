@@ -6,7 +6,7 @@ VibeHive is a web-based social platform designed to bring people together throug
 	•	Admin access for managing users and content
 	•	Blog deletion and sharing options for better content control and reach
 
-To start using VibeHive, open start.html in your browser.
+To start using VibeHive, open start.html first.
 
 It uses several strategies to enhance functionality and user experience:
 	•	Secure Authentication: Protects user accounts and content
