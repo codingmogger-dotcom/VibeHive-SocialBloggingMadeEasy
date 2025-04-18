@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeHive - Blog Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1 class="logo"><a href="index.html">VibeHive</a></h1>
+        <nav>
+            <ul>
+                <li><a class="extra" href="project.html">Home</a></li>
+                <li><a class="extra" href="#" id="createPostBtn">Create Post</a></li>
+                <li><a class="extra" href="about.html">About</a></li>
+                <li><a class="extra" href="#">Contact</a></li>
+                <li><a class="extra" href="chat.html">Chat</a></li>
+                <li><a class="extra" href="admin.html">Admin</a></li>
+                <li><a class="extra" href="#" id="userEmailDisplay"></a></li>
+                <li><button id="logout-btn" class="logout-btn">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Create Post Modal -->
+        <div id="createPostModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2 class="newblogtitle">Create a New Blog Post</h2>
+                <form id="postForm">
+                    <div class="title">
+                        <label class="postheading" for="postTitle">Title</label>
+                        <input type="text" class="postTitle" id="postTitle" name="postTitle" autocomplete="off" required>
+                    </div>
+                    <div class="category1">
+                        <label class="postheading" for="postCategory">Category</label>
+                        <input type="text" class="postCategory" id="postCategory" name="postCategory" autocomplete="off" required>
+                    </div>
+                    <label class="postheading" for="postDescription">Content</label>
+                    <textarea class="postDescription" id="postDescription" name="postDescription" autocomplete="off" required></textarea>
+                    <button type="submit" id="postSubmitBtn" class="postSubmitBtn">Publish Post</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Post Detail Modal -->
+        <div id="postDetailModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeDetailModal">&times;</span>
+                <h1 id="detailTitle"></h1>
+                <div class="post-meta">
+                    <span id="detailDate"></span>
+                    <span id="detailAuthor" class="post-author"></span>
+                </div>
+                <div class="post-content">
+                    <p id="detailDescription"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="postCreatedMessage" class="post-message">
+            Post published successfully!
+        </div>
+
+        <!-- Post Container -->
+        <div class="post-container">
+            <!-- Sample post - will be populated by JavaScript -->
+            <div class="post-box">
+                <h1 class="post-title">Welcome to VibeHive Blog</h1><br>
+                <h2 class="category">Introduction</h2><br>
+                <span class="post-date">16 Mar 2025</span>
+                <span class="post-author">By: Admin</span>
+                <p class="post-description">Welcome to our brand new blogging platform. Start sharing your thoughts with the world today...</p>
+                <span class="load-more" data-title="Welcome to VibeHive Blog" data-date="16 Mar 2025" data-author="Admin" data-description="Welcome to our brand new blogging platform. Start sharing your thoughts with the world today. This is a sample post to show how content will appear on our blog. Feel free to create your own posts and join our growing community of writers and readers. We're excited to see what you'll share!">Read more</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 VibeHive - A Platform for Bloggers</p>
+    </footer>
+
+    <script>
+        // Display logged in user email in the header
+        document.addEventListener('DOMContentLoaded', function() {
+            const userEmail = localStorage.getItem('userEmail');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+            
+            if (userEmail && userEmailDisplay) {
+                userEmailDisplay.textContent = userEmail;
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

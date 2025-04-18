@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeHive Admin - Restricted Words</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #040303;
+            color: #f0f0f0;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000000;
+            padding: 15px 5%;
+            position: fixed;
+            width: 90%;
+            z-index: 1000;
+        }
+        
+        .logo a {
+            font-size: 30px;
+            font-weight: bold;
+            color: #ffffffac;
+            text-decoration: none;
+        }
+        
+        main {
+            flex-grow: 1;
+            padding: 120px 5% 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .admin-panel {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        h1, h2 {
+            color: #b5a7a7;
+        }
+        
+        .word-list {
+            margin: 20px 0;
+            background-color: #262626;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .word-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #333;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+        
+        .word-text {
+            color: #f0f0f0;
+        }
+        
+        .remove-word {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .remove-word:hover {
+            background-color: #c0392b;
+        }
+        
+        .add-word-form {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        #newWord {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #333;
+            color: #f0f0f0;
+        }
+        
+        .add-btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .add-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background-color: #666;
+        }
+        
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="logo"><a href="project.html">VibeHive</a></h1>
+    </header>
+
+    <main>
+        <div class="admin-panel">
+            <h1>Admin Panel - Restricted Words</h1>
+            <p>Manage words that are not allowed in blog posts. These words will be filtered out when users create posts.</p>
+            
+            <h2>Current Restricted Words</h2>
+            <div class="word-list" id="wordList">
+                <!-- Words will be inserted here dynamically -->
+            </div>
+            
+            <form class="add-word-form" id="addWordForm">
+                <input type="text" id="newWord" placeholder="Add a new restricted word..." required>
+                <button type="submit" class="add-btn">Add</button>
+            </form>
+            
+            <a href="project.html" class="back-btn">Back to Blog</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 VibeHive - Admin Panel</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is admin
+            const userEmail = localStorage.getItem('userEmail');
+            // You can define admin emails here or in a separate configuration
+            const adminEmails = ['admin@vibehive.com', 'test@test.com','sai.sathya2023@vitstudent.ac.in']; // Add your admin emails
+            
+            if (!adminEmails.includes(userEmail)) {
+                alert("Access denied! You need admin privileges to view this page.");
+                window.location.href = "project.html";
+                return;
+            }
+            
+            const wordList = document.getElementById('wordList');
+            const addWordForm = document.getElementById('addWordForm');
+            const newWordInput = document.getElementById('newWord');
+            
+            // Load restricted words from localStorage
+            function loadRestrictedWords() {
+                const restrictedWords = JSON.parse(localStorage.getItem('vibehiveRestrictedWords')) || 
+                    ['shit', 'bullshit']; // Default restricted words
+                
+                // Save default list if it doesn't exist
+                if (!localStorage.getItem('vibehiveRestrictedWords')) {
+                    localStorage.setItem('vibehiveRestrictedWords', JSON.stringify(restrictedWords));
+                }
+                
+                // Clear existing list
+                wordList.innerHTML = '';
+                
+                // Display each word
+                restrictedWords.forEach(word => {
+                    const wordEntry = document.createElement('div');
+                    wordEntry.className = 'word-entry';
+                    wordEntry.innerHTML = `
+                        <span class="word-text">${word}</span>
+                        <button class="remove-word" data-word="${word}">Remove</button>
+                    `;
+                    wordList.appendChild(wordEntry);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-word').forEach(button => {
+                    button.addEventListener('click', function() {
+                        removeRestrictedWord(this.getAttribute('data-word'));
+                    });
+                });
+            }
+            
+            // Add a new restricted word
+            function addRestrictedWord(word) {
+                if (!word.trim()) return;
+                
+                const restrictedWords = JSON.parse(localStorage.getItem('vibehiveRestrictedWords')) || [];
+                
+                // Check if word already exists
+                if (restrictedWords.includes(word.toLowerCase())) {
+                    alert('This word is already in the restricted list.');
+                    return;
+                }
+                
+                // Add new word
+                restrictedWords.push(word.toLowerCase());
+                localStorage.setItem('vibehiveRestrictedWords', JSON.stringify(restrictedWords));
+                
+                // Reload the word list
+                loadRestrictedWords();
+                
+                // Clear input
+                newWordInput.value = '';
+            }
+            
+            // Remove a restricted word
+            function removeRestrictedWord(word) {
+                const restrictedWords = JSON.parse(localStorage.getItem('vibehiveRestrictedWords')) || [];
+                
+                // Remove the word
+                const updatedWords = restrictedWords.filter(w => w !== word);
+                localStorage.setItem('vibehiveRestrictedWords', JSON.stringify(updatedWords));
+                
+                // Reload the word list
+                loadRestrictedWords();
+            }
+            
+            // Event listener for adding new words
+            addWordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addRestrictedWord(newWordInput.value);
+            });
+            
+            // Load words on page load
+            loadRestrictedWords();
+        });
+    </script>
+</body>
+</html>
